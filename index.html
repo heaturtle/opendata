@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pei Portfolio</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --ink: #0d1b2e;
+        --ink-mid: #2c4a6e;
+        --ink-muted: #5a7a9e;
+        --ink-faint: #9ab3cc;
+        --blue: #185fa5;
+        --blue-light: #378add;
+        --blue-pale: #b5d4f4;
+        --blue-wash: #e6f1fb;
+        --bg: #f0f5fb;
+        --bg-card: #f8fbff;
+        --bg-dark: #0c1e35;
+        --border: #c8ddf0;
+        --serif: "Playfair Display", Georgia, serif;
+        --sans: "IBM Plex Sans", sans-serif;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: var(--sans);
+        background: var(--bg);
+        color: var(--ink);
+        font-size: 16px;
+        line-height: 1.7;
+        font-weight: 300;
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: rgba(240, 245, 251, 0.93);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border);
+        padding: 0 5%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 64px;
+      }
+      .logo {
+        font-family: var(--serif);
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--ink);
+        text-decoration: none;
+        letter-spacing: 0.01em;
+      }
+      .logo span {
+        color: var(--blue);
+      }
+      nav {
+        display: flex;
+        gap: 2rem;
+      }
+      nav a {
+        font-size: 0.75rem;
+        font-weight: 400;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+        color: var(--ink-muted);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      nav a:hover {
+        color: var(--blue);
+      }
+      .nav-toggle {
+        display: none;
+        cursor: pointer;
+        flex-direction: column;
+        gap: 5px;
+      }
+      .nav-toggle span {
+        width: 24px;
+        height: 1px;
+        background: var(--ink);
+        transition: all 0.3s;
+      }
+
+      .hero {
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+        padding: 8rem 5% 6rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero-bg-shape {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 48%;
+        background: var(--blue-wash);
+        clip-path: polygon(12% 0, 100% 0, 100% 100%, 0 100%);
+        z-index: 0;
+      }
+      .hero-grid {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+        width: 100%;
+        max-width: 1100px;
+      }
+      .hero-label {
+        font-size: 0.7rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--blue);
+        margin-bottom: 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+      }
+      .hero-label::before {
+        content: "";
+        display: inline-block;
+        width: 28px;
+        height: 1px;
+        background: var(--blue);
+      }
+      h1 {
+        font-family: var(--serif);
+        font-size: clamp(2.6rem, 5.5vw, 4.5rem);
+        font-weight: 400;
+        line-height: 1.08;
+        margin-bottom: 1.4rem;
+        color: var(--ink);
+      }
+      h1 em {
+        font-style: italic;
+        color: var(--blue);
+      }
+      .hero-desc {
+        font-size: 0.95rem;
+        color: var(--ink-muted);
+        line-height: 1.85;
+        margin-bottom: 2.5rem;
+        max-width: 400px;
+      }
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.8rem 1.8rem;
+        background: var(--blue);
+        color: #fff;
+        font-family: var(--sans);
+        font-size: 0.75rem;
+        font-weight: 400;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition:
+          background 0.25s,
+          gap 0.25s;
+      }
+      .btn-primary:hover {
+        background: var(--ink);
+        gap: 1rem;
+      }
+      .btn-primary svg {
+        width: 13px;
+        height: 13px;
+      }
+      .hero-stats {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 2.5rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+      }
+      .stat-item {
+        display: flex;
+        align-items: baseline;
+        gap: 0.6rem;
+      }
+      .stat-num {
+        font-family: var(--serif);
+        font-size: 2.8rem;
+        font-weight: 600;
+        color: var(--blue);
+        line-height: 1;
+      }
+      .stat-label {
+        font-size: 0.8rem;
+        color: var(--ink-muted);
+        letter-spacing: 0.05em;
+      }
+      .stat-divider {
+        height: 1px;
+        background: var(--border);
+      }
+
+      section {
+        padding: 7rem 5%;
+      }
+      .section-label {
+        font-size: 0.68rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--blue);
+        margin-bottom: 0.5rem;
+      }
+      h2 {
+        font-family: var(--serif);
+        font-size: clamp(1.9rem, 3.5vw, 2.7rem);
+        font-weight: 400;
+        margin-bottom: 3rem;
+        color: var(--ink);
+        line-height: 1.2;
+      }
+
+      .about {
+        background: #fff;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+      .about-grid {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 5rem;
+        align-items: start;
+        max-width: 1100px;
+      }
+      .about-text p {
+        font-size: 0.95rem;
+        color: var(--ink-muted);
+        line-height: 1.9;
+        margin-bottom: 1.3rem;
+      }
+      .about-text p strong {
+        color: var(--ink-mid);
+        font-weight: 500;
+      }
+      .skills-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.8rem;
+        margin-top: 2rem;
+      }
+      .skill-block {
+        padding: 1rem 1.1rem;
+        border: 1px solid var(--border);
+        background: var(--bg);
+      }
+      .skill-block-title {
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--blue);
+        margin-bottom: 0.4rem;
+        font-weight: 500;
+      }
+      .skill-block-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+      }
+      .skill-tag {
+        font-size: 0.68rem;
+        padding: 0.2rem 0.55rem;
+        background: var(--blue-wash);
+        color: #0c447c;
+        letter-spacing: 0.05em;
+      }
+
+      .timeline-section {
+        background: var(--bg);
+      }
+      .timeline {
+        position: relative;
+        max-width: 760px;
+        padding-left: 1.5rem;
+      }
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.5rem;
+        bottom: 0;
+        width: 1px;
+        background: var(--border);
+      }
+      .tl-item {
+        position: relative;
+        padding: 0 0 3.5rem 2.8rem;
+      }
+      .tl-item:last-child {
+        padding-bottom: 0;
+      }
+      .tl-dot {
+        position: absolute;
+        left: -0.28rem;
+        top: 0.35rem;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--blue);
+        border: 2px solid var(--bg);
+        box-shadow: 0 0 0 1px var(--blue);
+      }
+      .tl-year {
+        font-size: 0.68rem;
+        letter-spacing: 0.15em;
+        color: var(--blue);
+        text-transform: uppercase;
+        margin-bottom: 0.3rem;
+      }
+      .tl-title {
+        font-family: var(--serif);
+        font-size: 1.3rem;
+        font-weight: 400;
+        margin-bottom: 0.25rem;
+        color: var(--ink);
+      }
+      .tl-sub {
+        font-size: 0.82rem;
+        color: var(--ink-faint);
+        margin-bottom: 0.6rem;
+        letter-spacing: 0.03em;
+      }
+      .tl-desc {
+        font-size: 0.88rem;
+        color: var(--ink-muted);
+        line-height: 1.8;
+        max-width: 520px;
+      }
+      .tl-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin-top: 0.7rem;
+      }
+      .tl-tag {
+        font-size: 0.65rem;
+        padding: 0.18rem 0.55rem;
+        border: 1px solid var(--blue-pale);
+        color: var(--blue);
+        letter-spacing: 0.05em;
+      }
+
+      .works-section {
+        background: #fff;
+        border-top: 1px solid var(--border);
+      }
+      .works-filter {
+        display: flex;
+        gap: 0.75rem;
+        margin-bottom: 3rem;
+        flex-wrap: wrap;
+      }
+      .filter-btn {
+        font-size: 0.7rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 0.4rem 1rem;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--ink-muted);
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: var(--sans);
+      }
+      .filter-btn.active,
+      .filter-btn:hover {
+        background: var(--blue);
+        color: #fff;
+        border-color: var(--blue);
+      }
+      .works-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+      }
+      .work-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        overflow: hidden;
+        transition: transform 0.3s;
+        cursor: pointer;
+      }
+      .work-card:hover {
+        transform: translateY(-4px);
+      }
+      .work-thumb {
+        aspect-ratio: 16/10;
+        background: var(--blue-wash);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      .work-thumb-num {
+        font-family: var(--serif);
+        font-size: 4.5rem;
+        font-weight: 600;
+        color: var(--blue-pale);
+        line-height: 1;
+      }
+      .work-thumb-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--blue);
+        transform: scaleX(0);
+        transition: transform 0.35s;
+        transform-origin: left;
+      }
+      .work-card:hover .work-thumb-bar {
+        transform: scaleX(1);
+      }
+      .work-info {
+        padding: 1.2rem 1.35rem;
+      }
+      .work-category {
+        font-size: 0.63rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--blue);
+        margin-bottom: 0.35rem;
+      }
+      .work-title {
+        font-family: var(--serif);
+        font-size: 1.15rem;
+        font-weight: 400;
+        color: var(--ink);
+        margin-bottom: 0.3rem;
+      }
+      .work-meta {
+        font-size: 0.76rem;
+        color: var(--ink-faint);
+        display: flex;
+        gap: 0.8rem;
+      }
+
+      .contact-strip {
+        background: var(--bg-dark);
+        color: #fff;
+        padding: 5.5rem 5%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .contact-strip .section-label {
+        color: var(--blue-light);
+        margin-bottom: 1rem;
+      }
+      .contact-strip h2 {
+        color: #fff;
+        margin-bottom: 1rem;
+      }
+      .contact-strip p {
+        color: rgba(180, 210, 244, 0.6);
+        font-size: 0.92rem;
+        max-width: 380px;
+        margin-bottom: 2.5rem;
+      }
+      .btn-outline {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.8rem 2rem;
+        border: 1px solid rgba(55, 138, 221, 0.45);
+        color: var(--blue-pale);
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition:
+          border-color 0.25s,
+          background 0.25s;
+      }
+      .btn-outline:hover {
+        background: rgba(55, 138, 221, 0.12);
+        border-color: var(--blue-light);
+      }
+
+      footer {
+        background: var(--bg-dark);
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        padding: 2rem 5%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .footer-logo {
+        font-family: var(--serif);
+        font-size: 1rem;
+        color: rgba(180, 210, 244, 0.4);
+        font-weight: 400;
+      }
+      .footer-copy {
+        font-size: 0.7rem;
+        color: rgba(255, 255, 255, 0.2);
+        letter-spacing: 0.05em;
+      }
+      .footer-links {
+        display: flex;
+        gap: 1.5rem;
+      }
+      .footer-links a {
+        font-size: 0.7rem;
+        color: rgba(180, 210, 244, 0.35);
+        text-decoration: none;
+        letter-spacing: 0.05em;
+        transition: color 0.2s;
+      }
+      .footer-links a:hover {
+        color: var(--blue-light);
+      }
+
+      @media (max-width: 768px) {
+        nav {
+          display: none;
+        }
+        nav.open {
+          display: flex;
+          flex-direction: column;
+          position: absolute;
+          top: 64px;
+          left: 0;
+          right: 0;
+          background: #f0f5fb;
+          padding: 1.5rem 5%;
+          border-bottom: 1px solid var(--border);
+          gap: 1.5rem;
+        }
+        .nav-toggle {
+          display: flex;
+        }
+        .hero-grid {
+          grid-template-columns: 1fr;
+        }
+        .hero-bg-shape {
+          display: none;
+        }
+        .hero-stats {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 0;
+        }
+        .stat-divider {
+          display: none;
+        }
+        .about-grid {
+          grid-template-columns: 1fr;
+        }
+        .skills-grid {
+          grid-template-columns: 1fr;
+        }
+        footer {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+      @media (max-width: 480px) {
+        .works-grid {
+          grid-template-columns: 1fr;
+        }
+        section {
+          padding: 5rem 5%;
+        }
+        .hero-stats {
+          grid-template-columns: 1fr;
+        }
+      }
+      .text-decoration-none {
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a class="logo" href="#">Pei<span>.</span></a>
+      <nav id="nav">
+        <a href="#about">關於我</a>
+        <a href="#timeline">歷程</a>
+        <a href="#works">作品</a>
+      </nav>
+      <div
+        class="nav-toggle"
+        id="toggle"
+        onclick="document.getElementById('nav').classList.toggle('open')"
+      >
+        <span></span><span></span><span></span>
+      </div>
+    </header>
+
+    <section class="hero" id="home">
+      <div class="hero-bg-shape"></div>
+      <div class="hero-grid">
+        <div class="hero-content">
+          <div class="hero-label">SEO/前端工程師</div>
+          <h1>
+            用程式碼轉換<em><br />流量</em><br />與體驗
+          </h1>
+
+          <a href="#works" class="btn-primary">
+            瀏覽作品
+            <svg
+              viewBox="0 0 13 13"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <path d="M1 6.5h11M7.5 2.5l5 4-5 4" />
+            </svg>
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-num">5+</span>
+            <span class="stat-label">年前端開發經驗</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-num">40+</span>
+            <span class="stat-label">優化過的網站專案</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <div class="about-grid">
+        <div class="about-text">
+          <div class="section-label">自我簡介</div>
+          <h2>技術與搜尋<br />策略的交匯點</h2>
+          <p>
+            我相信好的網站不只是跑得快，更要讓搜尋引擎讀得懂、讓使用者留得住。
+          </p>
+
+          <div class="skills-grid">
+            <div class="skill-block">
+              <div class="skill-block-title">網頁製作運用</div>
+              <div class="skill-block-tags">
+                <span class="skill-tag">Figma</span>
+                <span class="skill-tag">Bootstrap</span>
+                <span class="skill-tag">WordPress</span>
+                <span class="skill-tag">Vue</span>
+              </div>
+            </div>
+
+            <div class="skill-block">
+              <div class="skill-block-title">SEO分析工具</div>
+              <div class="skill-block-tags">
+                <span class="skill-tag">Schema</span>
+                <span class="skill-tag">GSC</span>
+                <span class="skill-tag">GA4</span>
+                <span class="skill-tag">Ahrefs</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div
+            style="
+              background: var(--blue-wash);
+              border: 1px solid var(--border);
+              padding: 2rem;
+            "
+          >
+            <div
+              style="
+                font-size: 0.68rem;
+                letter-spacing: 0.15em;
+                text-transform: uppercase;
+                color: var(--blue);
+                margin-bottom: 1.2rem;
+              "
+            >
+              核心指標
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 1.2rem">
+              <div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 0.8rem;
+                    margin-bottom: 0.4rem;
+                  "
+                >
+                  <span style="color: var(--ink-mid)">Lighthouse 效能分數</span
+                  ><span style="color: var(--blue); font-weight: 500">95+</span>
+                </div>
+                <div style="height: 4px; background: var(--border)">
+                  <div
+                    style="height: 100%; width: 95%; background: var(--blue)"
+                  ></div>
+                </div>
+              </div>
+              <div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 0.8rem;
+                    margin-bottom: 0.4rem;
+                  "
+                >
+                  <span style="color: var(--ink-mid)">SEO 技術掌握度</span
+                  ><span style="color: var(--blue); font-weight: 500">92%</span>
+                </div>
+                <div style="height: 4px; background: var(--border)">
+                  <div
+                    style="height: 100%; width: 92%; background: var(--blue)"
+                  ></div>
+                </div>
+              </div>
+              <div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 0.8rem;
+                    margin-bottom: 0.4rem;
+                  "
+                >
+                  <span style="color: var(--ink-mid)">前端工程深度</span
+                  ><span style="color: var(--blue); font-weight: 500">88%</span>
+                </div>
+                <div style="height: 4px; background: var(--border)">
+                  <div
+                    style="
+                      height: 100%;
+                      width: 88%;
+                      background: var(--blue-light);
+                    "
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="timeline-section" id="timeline">
+      <div class="section-label">職涯歷程</div>
+      <h2>走過的每一步</h2>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">2026.1 — 2026.4</div>
+          <div class="tl-title">課程 · 生成式AI與全端程式設計班</div>
+          <div class="tl-desc">
+            從網頁架構、API串接、資料庫整合到 AI 輔助開發
+          </div>
+          <div class="tl-tags">
+            <span class="tl-tag">Figma</span
+            ><span class="tl-tag">flask_api</span
+            ><span class="tl-tag">laravel</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">2019.12 — 2025.3</div>
+          <div class="tl-title">網頁前端工程師 · 台中</div>
+          <div class="tl-desc">
+            網頁製作品並且運用語意化 HTML5 標籤與 JSON-LD
+            結構化資料，提升搜尋引擎對網頁內容的理解精準度。
+          </div>
+          <div class="tl-tags">
+            <span class="tl-tag">Bootstrap</span
+            ><span class="tl-tag">技術 SEO</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">2019.5 — 2019.10</div>
+          <div class="tl-title">SEO工程師 · 台中</div>
+
+          <div class="tl-desc">建立網頁，並且執行 SEO 優化。</div>
+          <div class="tl-tags">
+            <span class="tl-tag">技術 SEO</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">2018.12 — 2019.3</div>
+          <div class="tl-title">課程 · 多媒體與網頁製作</div>
+          <div class="tl-desc">學習美編工具操作，以及網頁切版。</div>
+          <div class="tl-tags">
+            <span class="tl-tag">Photoshop</span>
+            <span class="tl-tag">Illustrator</span>
+            <span class="tl-tag">Bootstrap</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">2017.8 — 2018.9</div>
+          <div class="tl-title">專案助理 · 嘉義</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">2013.9 — 2017.6</div>
+          <div class="tl-title">資訊管理學系</div>
+          <div class="tl-sub">國立虎尾科技大學</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="works-section" id="works">
+      <div class="section-label">精選作品</div>
+      <h2>專案成果展示</h2>
+
+      <div class="works-grid" id="works-grid">
+        <a
+          href="https://heaturtle.github.io/shop/"
+          class="text-decoration-none"
+        >
+          <div class="work-card">
+            <div class="work-thumb">
+              <span class="work-thumb-num">01</span>
+              <div class="work-thumb-bar"></div>
+            </div>
+            <div class="work-info">
+              <div class="work-category">web</div>
+              <div class="work-title">商品介紹網站</div>
+              <div class="work-meta">
+                串接Airtable抓取商品清單，登入後可直接在網站新增商品
+              </div>
+            </div>
+          </div>
+          </a
+        >
+        <a
+          href="https://www.figma.com/proto/okHbPuEXF2F0QTrGRnwbih/shop?node-id=54-281&t=Idy5qRJON66bwhER-0&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=54%3A281"
+          class="text-decoration-none"
+        >
+          <div class="work-card">
+            <div class="work-thumb">
+              <span class="work-thumb-num">02</span>
+              <div class="work-thumb-bar"></div>
+            </div>
+            <div class="work-info">
+              <div class="work-category">Figma</div>
+              <div class="work-title">JellyCat介紹</div>
+              <div class="work-meta">以暖色調營造療癒氛圍，結合 Figma 動態微互動提升視覺層次。</div>
+            </div></div
+        >
+        <a
+          href="https://heaturtle.github.io/Pikmin/"
+          class="text-decoration-none"
+        >
+          <div class="work-card">
+            <div class="work-thumb" style="background: #dce9f7">
+              <span class="work-thumb-num">03</span>
+              <div class="work-thumb-bar"></div>
+            </div>
+            <div class="work-info">
+              <div class="work-category">Maps</div>
+              <div class="work-title">皮克敏純點</div>
+              <div class="work-meta">運用OpenStreetMap，製作台中地區，皮克敏裝飾品純點查詢</div>
+            </div>
+          </div>
+        </a>
+        <a
+          href="https://heaturtle.github.io/opendata/bike.html"
+          class="text-decoration-none"
+        >
+          <div class="work-card">
+            <div class="work-thumb" style="background: #dce9f7">
+              <span class="work-thumb-num">04</span>
+              <div class="work-thumb-bar"></div>
+            </div>
+            <div class="work-info">
+              <div class="work-category">opendata</div>
+              <div class="work-title">台北youbike站點剩餘數量</div>
+              <div class="work-meta">整合 Open Data API 獲取即時資訊，提供使用者各站點剩餘腳踏車數量的查詢功能。</div>
+            </div>
+          </div>
+        </a>
+        <a
+          href="https://heaturtle.github.io/opendata/hotel.html"
+          class="text-decoration-none"
+        >
+          <div class="work-card">
+            <div class="work-thumb" style="background: #dce9f7">
+              <span class="work-thumb-num">05</span>
+              <div class="work-thumb-bar"></div>
+            </div>
+            <div class="work-info">
+              <div class="work-category">opendata</div>
+              <div class="work-title">全台合格旅館</div>
+              <div class="work-meta">整合 Open Data API 串接全台合法旅宿。</div>
+            </div>
+          </div>
+        </a>
+      </div>
+  
+      
+    </section>
+
+    <footer>
+      <div class="footer-logo">Pei</div>
+      <div class="footer-copy">© 2026 All rights reserved</div>
+    </footer>
+
+    <script>
+      function filterWorks(cat, btn) {
+        document
+          .querySelectorAll(".filter-btn")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        document.querySelectorAll(".work-card").forEach((card) => {
+          card.style.display =
+            cat === "all" || card.dataset.cat === cat ? "block" : "none";
+        });
+      }
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.style.opacity = "1";
+              e.target.style.transform = "translateY(0)";
+            }
+          });
+        },
+        { threshold: 0.08 },
+      );
+      document.querySelectorAll(".work-card,.tl-item").forEach((el) => {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(18px)";
+        el.style.transition = "opacity 0.5s ease,transform 0.5s ease";
+        obs.observe(el);
+      });
+    </script>
+  </body>
+</html>
