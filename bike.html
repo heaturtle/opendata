@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YouBike 即時站點資訊</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+
+    <style>
+      /* ====== 全站背景 ====== */
+      body {
+        background: linear-gradient(135deg, #dff3ff, #f5fbff);
+        font-family: "Noto Sans TC", sans-serif;
+      }
+
+      /* ====== 標題樣式 ====== */
+      .page-title {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 900;
+        margin: 2rem 0 1.5rem 0;
+        color: #004b87;
+        letter-spacing: 2px;
+      }
+
+      .page-subtitle {
+        text-align: center;
+        color: #5c6f7c;
+        margin-bottom: 2rem;
+      }
+
+      /* ====== 表格整體 ====== */
+      .table-rwd {
+        background: #ffffff;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 75, 135, 0.1);
+      }
+
+      /* 表頭 */
+      thead {
+        font-size: 1rem;
+        background-color: #0077b6;
+        color: #fff;
+      }
+
+      thead th {
+        padding: 1rem;
+        text-align: center;
+      }
+
+      /* 表格內容 */
+      .table-rwd tbody tr {
+        transition: all 0.3s ease;
+      }
+
+      .table-rwd tbody tr:hover {
+        background-color: #f1f9ff;
+        transform: scale(1.01);
+      }
+
+      .table-rwd td {
+        text-align: center;
+        padding: 0.8rem;
+      }
+
+      /* 數字強調 */
+      .table-rwd td:nth-child(2),
+      .table-rwd td:nth-child(3) {
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+
+      /* 最後更新時間 */
+      .table-rwd td:nth-child(5) span {
+        font-size: 0.9rem;
+        color: #6c757d;
+      }
+
+      /* ====== RWD 手機模式 ====== */
+      @media screen and (max-width: 768px) {
+        thead {
+          display: none;
+        }
+
+        .table-rwd tbody tr {
+          display: block;
+          border: none;
+          border-radius: 15px;
+          background: #ffffff;
+          box-shadow: 0 5px 15px rgba(0, 75, 135, 0.1);
+          margin-bottom: 1.5rem;
+          padding: 1rem;
+        }
+
+        .table-rwd tbody tr td {
+          display: block;
+          overflow: hidden;
+          padding: 0.5rem 0;
+        }
+
+        .table-rwd tbody tr td::before {
+          content: attr(data-th);
+          color: #0077b6;
+          font-weight: 700;
+          display: block;
+          margin-bottom: 0.3rem;
+        }
+
+        .table-rwd tbody tr td span {
+          display: block;
+        }
+      }
+      .bike-status {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-weight: bold;
+        font-size: 1.1rem;
+        color: #000; /* 數字黑色 */
+      }
+
+      .status-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+
+      .dot-red {
+        background-color: #e63946;
+      }
+
+      .dot-orange {
+        background-color: #f4a261;
+      }
+
+      .dot-green {
+        background-color: #2a9d8f;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mx-auto">
+      <h1 class="page-title">🚲 YouBike 即時站點資訊</h1>
+      <p class="page-subtitle">即時查詢各站點剩餘可借數量與更新時間</p>
+      <table class="mx-auto table table-rwd">
+        <thead>
+          <tr>
+            <th>站點</th>
+            <th>總數量</th>
+            <th>目前可借數量</th>
+            <th>地區</th>
+            <th>最後更新時間</th>
+          </tr>
+        </thead>
+        <tbody id="mytable">
+          <tr>
+            <td data-th="站點"><span>站點</span></td>
+            <td data-th="總數量">
+              <span>總數量</span>
+            </td>
+
+            <td data-th="目前可借數量">
+              <span>目前可借數量</span>
+            </td>
+
+            <td data-th="地區">
+              <span>地區</span>
+            </td>
+
+            <td data-th="最後更新時間">
+              <span>最後更新時間</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://code.jquery.com/jquery-4.0.0.min.js"
+      integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      $(function () {
+        $.ajax({
+          type: "get",
+          url: "https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json",
+          dataType: "json",
+          success: showData,
+          error: function () {
+            console.log("error data");
+          },
+        });
+      });
+      function showData(data) {
+        $("#mytable").empty();
+
+        data.forEach(function (item) {
+          let bikeCount = parseInt(item.available_rent_bikes);
+          let dotClass = "";
+
+          if (bikeCount === 0) {
+            dotClass = "dot-red";
+          } else if (bikeCount <= 5) {
+            dotClass = "dot-orange";
+          } else {
+            dotClass = "dot-green";
+          }
+
+          let tableHTML = `
+          <tr>
+              <td data-th="站點"><span>${item.sna}</span></td>
+
+              <td data-th="總數量">
+                <span>${item.Quantity}</span>
+              </td>
+
+              <td data-th="目前可借數量">
+                <span class="bike-status">
+                  <span class="status-dot ${dotClass}"></span>
+                  ${bikeCount}
+                </span>
+              </td>
+
+              <td data-th="地區">
+                <span>${item.sarea}</span>
+              </td>
+
+              <td data-th="最後更新時間">
+                <span>${item.updateTime}</span>
+              </td>
+          </tr>
+        `;
+
+          $("#mytable").append(tableHTML);
+        });
+      }
+    </script>
+  </body>
+</html>
