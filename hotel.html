@@ -265,7 +265,7 @@
       $(function () {
         $.ajax({
           type: "GET",
-          url: "/CityCountyData.json",
+          url: "CityCountyData.json",
           dataType: "json",
           success: function (data) {
             CityCountyData = data;
@@ -296,7 +296,7 @@
 
         $.ajax({
           type: "GET",
-          url: "/js/HotelList.json",
+          url: "HotelList.json",
           dataType: "json",
           success: showdata,
           error: function () {
